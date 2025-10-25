@@ -5,6 +5,7 @@ import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { route } from 'ziggy-js';
 import CardHeader from './Components/CardHeader';
 
 interface Props {
@@ -24,13 +25,13 @@ const Index = ({ countries }: Props) => {
     const handleSearch = () => {
         setLoading(true);
 
-        router.get('/', { search: searchTerm }, { preserveState: true, onFinish: () => setLoading(false) });
+        router.get(route('countries'), { search: searchTerm }, { preserveState: true, onFinish: () => setLoading(false) });
     };
 
     const handleCountryClick = (cca3: string) => {
         setLoading(true);
 
-        router.get(`/countries/${cca3}`, {}, { onFinish: () => setLoading(false) });
+        router.get(route('countries.show', cca3), {}, { onFinish: () => setLoading(false) });
     };
 
     return (
@@ -38,7 +39,7 @@ const Index = ({ countries }: Props) => {
             <Head title="Countries" />
             <div className="mx-auto max-w-[1140px]">
                 {/* Web App Logo */}
-                <div className="my-8 flex cursor-pointer justify-center" onClick={() => router.visit('/')}>
+                <div className="my-8 flex cursor-pointer justify-center" onClick={() => router.visit(route('countries'))}>
                     <h3 className="text-4xl font-bold">Countries App</h3>
                 </div>
 
