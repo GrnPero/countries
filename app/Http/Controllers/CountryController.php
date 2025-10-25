@@ -34,4 +34,17 @@ class CountryController extends Controller
             'countries' => $countries,
         ]);
     }
+
+    public function show(string $cca3)
+    {
+        $country = $this->countryService->getCountryByCca3($cca3);
+
+        if (!$country) {
+            abort(404, 'Country not found');
+        }
+
+        return Inertia::render('Countries/Show', [
+            'country' => $country,
+        ]);
+    }
 }
