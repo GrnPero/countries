@@ -38,10 +38,10 @@ class CountryController extends Controller
         } catch (ConnectionException | RequestException $e) {
             Log::error('API connection error fetching countries', ['error' => $e->getMessage()]);
 
-            // If it's because of a 404, we can assume no countries were found
             $error = "Unable to connect to the countries API. Please check your network connection and try again."; 
         } catch (\Exception $e) { 
             Log::error('Unexpected error fetching countries', ['error' => $e->getMessage()]);
+            
             $error = "An unexpected error occurred while fetching countries. Please try again later.";
         }
 
