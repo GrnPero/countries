@@ -10,9 +10,10 @@ import CardHeader from './Components/CardHeader';
 
 interface Props {
     countries: Country[];
+    error?: string | null;
 }
 
-const Index = ({ countries }: Props) => {
+const Index = ({ countries, error }: Props) => {
     const [searchTerm, setSearchTerm] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -60,10 +61,12 @@ const Index = ({ countries }: Props) => {
                 </div>
 
                 {/* Countries grid */}
-                {loading ? (
+                {loading && !error ? (
                     <div className="flex h-[50vh] items-center justify-center">
                         <ProgressSpinner />
                     </div>
+                ) : error ? (
+                    <div className="mx-4 mt-6 rounded-lg bg-red-100 p-4 text-center text-red-700 shadow">{error}</div>
                 ) : (
                     <div className="mx-4 mt-12">
                         {countries.length === 0 ? (

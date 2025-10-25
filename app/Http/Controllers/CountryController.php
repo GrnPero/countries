@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\CountryApiService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Client\ConnectionException;
 
 class CountryController extends Controller
 {
@@ -27,11 +30,22 @@ class CountryController extends Controller
             'search' => 'nullable|string|max:255',
         ]);
 
-        // Leverage the CountryApiService to fetch countries if needed
-        $countries = $this->countryService->getCountries($validated['search'] ?? null);
+        $error = null;
+        $countries = [];
+
+        try {
+            $countries = $this->countryService->getCountries($validated['search'] ?? null);
+        } catch (ConnectionException | RequestException $e) {
+            Log::error('API connection error fetching countries', ['error' => $e->getMessage()]);
+            $error = "Unable to connect to the countries API. Please check your network connection and try again.";
+        } catch (\Exception $e) { 
+            Log::error('Unexpected error fetching countries', ['error' => $e->getMessage()]);
+            $error = "An unexpected error occurred while fetching countries. Please try again later.";
+        }
 
         return Inertia::render('Countries/Index', [
             'countries' => $countries,
+            'error' => $error,
         ]);
     }
 
@@ -43,13 +57,29 @@ class CountryController extends Controller
      */
     public function show(string $cca3)
     {
-        $country = $this->countryService->getCountryByCca3($cca3);
+        $country = null;
+        $error = null;
 
-        if (!$country) {
-            abort(404, 'Country not found');
+        try {
+            $country = $this->countryService->getCountryByCca3($cca3);
+         } catch (ConnectionException | RequestException $e) {
+            Log::error('API connection error fetching country', [
+                'cca3' => $cca3,
+                'error' => $e->getMessage(),
+            ]);
+
+            $error = "Unable to connect to the countries API. Please check your network connection and try again.";
+        } catch (\Exception $e) {
+            Log::error('Unexpected error fetching country', [
+                'cca3' => $cca3,
+                'error' => $e->getMessage(),
+            ]);
+
+            $error = "An unexpected error occurred while fetching the country. Please try again later.";
         }
 
         return Inertia::render('Countries/Show', [
+            'error' => $error,
             'country' => $country,
         ]);
     }
