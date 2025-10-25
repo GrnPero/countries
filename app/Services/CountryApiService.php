@@ -16,6 +16,7 @@ class CountryApiService
     /**
      * Get all countries from the external API
      *
+     * @param string|null $search
      * @return array
      */
     public function getCountries(string|null $search): array
