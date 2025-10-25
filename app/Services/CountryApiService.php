@@ -22,8 +22,10 @@ class CountryApiService
      */
     public function getCountries(string|null $search): array
     {
-        $url = $this->apiUrl . ($search ? 'name/' . urlencode($search) : 'all');
-        
+        $search = $search ? trim($search) : null;
+
+        $url = $this->apiUrl . ($search ? 'name/' . rawurlencode($search) : 'all');
+
         try {
             $response = Http::timeout(5)->get($url, [
                 'fields' => 'name,flags,cca3',
