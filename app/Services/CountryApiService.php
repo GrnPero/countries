@@ -45,7 +45,7 @@ class CountryApiService
      */
     public function getCountryByCca3(string $cca3): ?array
     {
-        $response = Http::get("https://restcountries.com/v3.1/alpha/{$cca3}");
+        $response = Http::get($this->apiUrl . "alpha/{$cca3}");
         if ($response->successful()) {
             $data = $response->json();
             return $data[0] ?? null;
