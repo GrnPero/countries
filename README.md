@@ -38,7 +38,13 @@ This is a simple web application that displays information about countries aroun
     php artisan key:generate
     ```
 
-7. Run the development server:
+7. Run the migrations:
+
+    ```bash
+    php artisan migrate
+    ```
+
+8. Run the development server:
     ```bash
     php artisan serve
     npm run dev
