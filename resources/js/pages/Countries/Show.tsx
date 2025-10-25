@@ -158,7 +158,6 @@ const Show = ({ country, error }: Props) => {
                                 </p>
                             </Card>
                         </div>
-                        )
                     </>
                 )}
             </div>
