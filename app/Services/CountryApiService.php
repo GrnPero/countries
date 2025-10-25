@@ -31,9 +31,10 @@ class CountryApiService
 
             return $response->json();
         } catch (RequestException $e) {
-            if ($e->getCode() === 404) {
+            if ($e->response?->status() === 404) {
                 return [];
             }
+
             throw $e;
         }
     }
@@ -46,15 +47,24 @@ class CountryApiService
      */
     public function getCountryByCca3(string $cca3): ?array
     {
-        $response = Http::timeout(5)->get($this->apiUrl . "alpha/{$cca3}")->throw();
+        try {
+            $response = Http::timeout(5)->get($this->apiUrl . "alpha/{$cca3}")->throw();
 
-        if ($response->successful()) {
-            $data = $response->json();
-            return $data[0] ?? null;
-        } else if ($response->status() === 404) {
-            return null;
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data[0] ?? null;
+            } else {
+                return null;
+            }
+
+        } catch (RequestException $e) {
+            if ($e->response && ($e->response->status() === 404 || $e->getCode() === 400)) {
+                return null;
+            } else {
+                throw $e;
+            }
         }
-
+        
         return null;
     }
 }

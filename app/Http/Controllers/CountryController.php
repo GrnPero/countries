@@ -41,7 +41,7 @@ class CountryController extends Controller
             $error = "Unable to connect to the countries API. Please check your network connection and try again."; 
         } catch (\Exception $e) { 
             Log::error('Unexpected error fetching countries', ['error' => $e->getMessage()]);
-            
+
             $error = "An unexpected error occurred while fetching countries. Please try again later.";
         }
 
@@ -78,6 +78,10 @@ class CountryController extends Controller
             ]);
 
             $error = "An unexpected error occurred while fetching the country. Please try again later.";
+        }
+
+        if (!$country && !$error) {
+            $error = "Country not found.";
         }
 
         return Inertia::render('Countries/Show', [
