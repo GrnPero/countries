@@ -39,11 +39,7 @@ class CountryController extends Controller
             Log::error('API connection error fetching countries', ['error' => $e->getMessage()]);
 
             // If it's because of a 404, we can assume no countries were found
-            if ($e instanceOf RequestException && $e->getCode() === 404) { 
-                $error = null;
-            } else {
-                $error = "Unable to connect to the countries API. Please check your network connection and try again.";
-            }
+            $error = "Unable to connect to the countries API. Please check your network connection and try again."; 
         } catch (\Exception $e) { 
             Log::error('Unexpected error fetching countries', ['error' => $e->getMessage()]);
             $error = "An unexpected error occurred while fetching countries. Please try again later.";
@@ -74,11 +70,7 @@ class CountryController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            if ($e instanceOf RequestException) {
-                $error = "Country not found.";
-            } else {
-                $error = "Unable to connect to the countries API. Please check your network connection and try again.";
-            }
+            $error = "Unable to connect to the countries API. Please check your network connection and try again.";
         } catch (\Exception $e) {
             Log::error('Unexpected error fetching country', [
                 'cca3' => $cca3,

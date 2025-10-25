@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 
 class CountryApiService
@@ -23,15 +24,18 @@ class CountryApiService
     {
         $url = $this->apiUrl . ($search ? 'name/' . urlencode($search) : 'all');
         
-        $response = Http::timeout(5)->get($url, [
-            'fields' => 'name,flags,cca3',
-        ])->throw();
+        try {
+            $response = Http::timeout(5)->get($url, [
+                'fields' => 'name,flags,cca3',
+            ])->throw();
 
-        if ($response->successful()) {
             return $response->json();
+        } catch (RequestException $e) {
+            if ($e->getCode() === 404) {
+                return [];
+            }
+            throw $e;
         }
-
-        return [];
     }
 
     /**
