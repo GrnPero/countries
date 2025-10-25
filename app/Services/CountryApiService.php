@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Client\ConnectionException;
 
 class CountryApiService
 {
@@ -25,16 +23,12 @@ class CountryApiService
     {
         $url = $this->apiUrl . ($search ? 'name/' . urlencode($search) : 'all');
         
-        try {
-            $response = Http::timeout(5)->get($url, [
-                'fields' => 'name,flags,cca3',
-            ])->throw();
+        $response = Http::timeout(5)->get($url, [
+            'fields' => 'name,flags,cca3',
+        ])->throw();
 
-            if ($response->successful()) {
-                return $response->json();
-            }
-        } catch (ConnectionException | RequestException $e) {
-            throw $e;
+        if ($response->successful()) {
+            return $response->json();
         }
 
         return [];
@@ -48,18 +42,14 @@ class CountryApiService
      */
     public function getCountryByCca3(string $cca3): ?array
     {
-        try {
-           $response = Http::timeout(5)->get($this->apiUrl . "alpha/{$cca3}")->throw();
+        $response = Http::timeout(5)->get($this->apiUrl . "alpha/{$cca3}")->throw();
 
-            if ($response->successful()) {
-                $data = $response->json();
-                return $data[0] ?? null;
-            } else if ($response->status() === 404) {
-                return null;
-            }
-        } catch (ConnectionException | RequestException $e) {
-            throw $e;
-        } 
+        if ($response->successful()) {
+            $data = $response->json();
+            return $data[0] ?? null;
+        } else if ($response->status() === 404) {
+            return null;
+        }
 
         return null;
     }
