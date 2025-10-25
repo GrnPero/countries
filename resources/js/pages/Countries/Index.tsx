@@ -64,16 +64,22 @@ const Index = ({ countries }: Props) => {
                         <ProgressSpinner />
                     </div>
                 ) : (
-                    <div className="mx-4 mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                        {countries.map((country: Country) => (
-                            <Card
-                                className="cursor-pointer hover:brightness-90"
-                                onClick={() => handleCountryClick(country.cca3)}
-                                key={country.cca3}
-                                title={country.name.common}
-                                header={<CardHeader country={country} />}
-                            />
-                        ))}
+                    <div className="mx-4 mt-12">
+                        {countries.length === 0 ? (
+                            <p className="mt-10 text-center text-lg text-gray-500">No countries found.</p>
+                        ) : (
+                            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                                {countries.map((country: Country) => (
+                                    <Card
+                                        className="cursor-pointer hover:brightness-90"
+                                        onClick={() => handleCountryClick(country.cca3)}
+                                        key={country.cca3}
+                                        title={country.name.common}
+                                        header={<CardHeader country={country} />}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

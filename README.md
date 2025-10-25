@@ -6,7 +6,7 @@ This is a simple web application that displays information about countries aroun
 
 1. Clone the repository:
     ```bash
-    git clone
+    git clone git@github.com:GrnPero/countries.git
     ```
 2. Navigate to the project directory:
     ```bash
@@ -26,22 +26,32 @@ This is a simple web application that displays information about countries aroun
 
     ```
 
-5. Near the end of the .env file add the API URL:
+5. Make these changes to the .env file since we aren't using a database:
+
+    ```
+    # DB_CONNECTION=sqlite
+
+    SESSION_DRIVER=file
+    QUEUE_CONNECTION=sync
+    CACHE_STORE=file
+    ```
+
+    Or you can just run the migrations if you prefer to keep the database configuration:
+
+    ```bash
+    php artisan migrate
+    ```
+
+6. Also, add the following line to the .env file to set the REST Countries API URL:
 
     ```
     REST_COUNTRIES_API_URL=https://restcountries.com/v3.1/
     ```
 
-6. Generate an application key:
+7. Generate an application key:
 
     ```bash
     php artisan key:generate
-    ```
-
-7. Run the migrations:
-
-    ```bash
-    php artisan migrate
     ```
 
 8. Run the development server:
