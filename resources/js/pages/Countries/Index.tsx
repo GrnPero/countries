@@ -1,3 +1,4 @@
+import { Country } from '@/types/types';
 import { Head, router } from '@inertiajs/react';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
@@ -7,7 +8,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import CardHeader from './Components/CardHeader';
 
 interface Props {
-    countries: Array<any>;
+    countries: Country[];
 }
 
 const Index = ({ countries }: Props) => {
@@ -32,14 +33,6 @@ const Index = ({ countries }: Props) => {
         router.get(`/countries/${cca3}`, {}, { onFinish: () => setLoading(false) });
     };
 
-    if (loading) {
-        return (
-            <div className="flex h-[100vh] items-center justify-center">
-                <ProgressSpinner />
-            </div>
-        );
-    }
-
     return (
         <>
             <Head title="Countries" />
@@ -49,6 +42,7 @@ const Index = ({ countries }: Props) => {
                     <h3 className="text-4xl font-bold">Countries App</h3>
                 </div>
 
+                {/* Search bar */}
                 <div className="mx-4 my-4">
                     <div className="p-inputgroup">
                         <InputText
@@ -63,17 +57,25 @@ const Index = ({ countries }: Props) => {
                         <Button icon="pi pi-search" onClick={handleSearch} />
                     </div>
                 </div>
-                <div className="mx-4 mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                    {countries.map((country) => (
-                        <Card
-                            className="cursor-pointer hover:brightness-90"
-                            onClick={() => handleCountryClick(country.cca3)}
-                            key={country.cca3}
-                            title={country.name.common}
-                            header={<CardHeader country={country} />}
-                        />
-                    ))}
-                </div>
+
+                {/* Countries grid */}
+                {loading ? (
+                    <div className="flex h-[50vh] items-center justify-center">
+                        <ProgressSpinner />
+                    </div>
+                ) : (
+                    <div className="mx-4 mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                        {countries.map((country: Country) => (
+                            <Card
+                                className="cursor-pointer hover:brightness-90"
+                                onClick={() => handleCountryClick(country.cca3)}
+                                key={country.cca3}
+                                title={country.name.common}
+                                header={<CardHeader country={country} />}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </>
     );

@@ -35,6 +35,12 @@ class CountryController extends Controller
         ]);
     }
 
+    /**
+     * Returns a specific country by its cca3 code
+     * 
+     * @param string $cca3
+     * @return \Inertia\Response
+     */
     public function show(string $cca3)
     {
         $country = $this->countryService->getCountryByCca3($cca3);

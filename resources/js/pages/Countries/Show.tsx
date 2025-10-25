@@ -1,10 +1,11 @@
+import { Country } from '@/types/types';
 import { Head } from '@inertiajs/react';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import CardHeader from './Components/CardHeader';
 
 interface Props {
-    country: any;
+    country: Country;
 }
 
 const Show = ({ country }: Props) => {
@@ -57,6 +58,12 @@ const Show = ({ country }: Props) => {
                         <p>
                             <strong>Start of Week:</strong> {country.startOfWeek}
                         </p>
+                        <p>
+                            <strong>Status</strong> {country.status ?? 'N/A'}
+                        </p>
+                        <p>
+                            <strong>CCA3</strong> {country.cca3 ?? 'N/A'}
+                        </p>
                     </Card>
 
                     <Card title="Languages & Currencies">
@@ -95,6 +102,10 @@ const Show = ({ country }: Props) => {
                         <p>
                             <strong>Landlocked:</strong> {country.landlocked ? 'Yes' : 'No'}
                         </p>
+
+                        <p>
+                            <strong>Area:</strong> {country.area ?? 'N/A'} km²
+                        </p>
                     </Card>
 
                     <Card title="Maps & Flag">
@@ -124,6 +135,15 @@ const Show = ({ country }: Props) => {
                         </p>
                         <p>
                             <strong>Postal Code:</strong> {country.postalCode?.format || 'N/A'}
+                        </p>
+                        <p>
+                            <strong>Gini:</strong>{' '}
+                            {country.gini
+                                ? (() => {
+                                      const latestYear = Math.max(...Object.keys(country.gini).map(Number));
+                                      return `${country.gini[latestYear.toString()]} (${latestYear})`;
+                                  })()
+                                : 'N/A'}
                         </p>
                     </Card>
                 </div>
