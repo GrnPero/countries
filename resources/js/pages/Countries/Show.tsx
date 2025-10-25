@@ -14,7 +14,9 @@ const Show = ({ country }: Props) => {
 
             <div className="mx-auto max-w-[1140px] p-4">
                 {/* Back button */}
-                <Button label="Back" icon="pi pi-arrow-left" className="mb-4" onClick={() => window.history.back()} />
+                <div className="my-4">
+                    <Button label="Back" icon="pi pi-arrow-left" onClick={() => window.history.back()} />
+                </div>
 
                 {/* Header: flag and name */}
                 <Card className="shadow-md">
@@ -115,7 +117,7 @@ const Show = ({ country }: Props) => {
                             <strong>Car Side:</strong> {country.car?.side}
                         </p>
                         <p>
-                            <strong>Car Signs:</strong> {country.car?.signs?.join(', ')}
+                            <strong>Car Signs:</strong> {country.car?.signs?.join(', ') || 'N/A'}
                         </p>
                         <p>
                             <strong>FIFA:</strong> {country.fifa || 'N/A'}

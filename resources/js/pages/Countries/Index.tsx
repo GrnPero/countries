@@ -2,7 +2,8 @@ import { Head, router } from '@inertiajs/react';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
-import { ChangeEvent, useState } from 'react';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { ChangeEvent, useEffect, useState } from 'react';
 import CardHeader from './Components/CardHeader';
 
 interface Props {
@@ -11,14 +12,33 @@ interface Props {
 
 const Index = ({ countries }: Props) => {
     const [searchTerm, setSearchTerm] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (countries && countries.length > 0) {
+            setLoading(false);
+        }
+    }, [countries]);
 
     const handleSearch = () => {
-        router.get('/', { search: searchTerm }, { preserveState: true });
+        setLoading(true);
+
+        router.get('/', { search: searchTerm }, { preserveState: true, onFinish: () => setLoading(false) });
     };
 
     const handleCountryClick = (cca3: string) => {
-        router.get(`/countries/${cca3}`);
+        setLoading(true);
+
+        router.get(`/countries/${cca3}`, {}, { onFinish: () => setLoading(false) });
     };
+
+    if (loading) {
+        return (
+            <div className="flex h-[100vh] items-center justify-center">
+                <ProgressSpinner />
+            </div>
+        );
+    }
 
     return (
         <>
